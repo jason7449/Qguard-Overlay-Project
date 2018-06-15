@@ -5,27 +5,57 @@ class MapData {
     this.sensorData = {};
     this.firstUpdate = true;
 
+    var historicalOverlay;
+
     this.map = new google.maps.Map(document.getElementById("map-canvas"), {
-      zoom: 18,
+      zoom: 19.5,
       center: this.center,
-      scaleControl: true,
+      draggable: false,
+      scaleControl: false,
+      /*
       scaleControlOptions: {
         position: google.maps.ControlPosition.TOP_RIGHT 
       },
-      mapTypeControl: true,
+      */
+      mapTypeControl: false,
+      /*
       mapTypeControlOptions: {
         position: google.maps.ControlPosition.LEFT_BOTTOM
       },
-      zoomControl: true,
+      */
+      zoomControl: false,
+      /*
       zoomControlOptions: {
         position: google.maps.ControlPosition.LEFT_CENTER
       },
-      rotateControl: true,
+      */
+      rotateControl: false,
+      /*
       rotateControlOptions: {
         position: google.maps.ControlPosition.LEFT_CENTER
       },
+      */
       streetViewControl: false
     });
+
+
+     var imageBounds = {
+         north: 40.776584921487284,
+          south: 40.77351385925161,
+          east: -73.87345887372021,
+          west: -73.87523967442439
+      };
+
+
+      historicalOverlay = new google.maps.GroundOverlay(
+        'https://i.imgur.com/2sbZT6Q.jpg',
+        imageBounds);
+      historicalOverlay.setMap(this.map);
+
+
+
+
+
 
     console.log(this.map.controls);
   }

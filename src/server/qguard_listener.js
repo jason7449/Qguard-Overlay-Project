@@ -25,6 +25,7 @@ class QGuardListener {
       
     this.object_list_geo = {}; // Geographic coordinates
     this.object_list_cart = {}; // Cartesian coordinates
+    console.log( "log in: "+ this.log_dir) 
 
     if (save_logs) {
       this.create_log_directory(this.log_dir);

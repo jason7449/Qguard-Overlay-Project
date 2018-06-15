@@ -38,6 +38,7 @@
 	  
 	  var mapOptions = {
         zoom: 17,
+		gestureHandling: 'greedy',
         center: new google.maps.LatLng(40.774159787101574,-73.87578684506354)
       };
 	  
@@ -123,9 +124,7 @@
 		            console.log("point2"+ newPointB);
 		        });
 				
-				
-				
-				
+
 				
 				
 				//Rotation marker
@@ -150,23 +149,8 @@
 					rot = Math.atan2(D_rotation_diff, k_rotation_diff) * 180 / Math.PI;
 					overlay.updateRotation();
 		      	});
-				
-				
-				
-		
-		
-		
-		
-		
-		
-		
-		
-		
+			
 
-    
-
-
-        
 
       }
 

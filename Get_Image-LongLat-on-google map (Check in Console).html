@@ -24,7 +24,13 @@
 
 
       var overlay;
+	  var k_diff = 0.005;
+		var D_diff = 0.01;
+		var rot = 0;
+		var loc_center = new google.maps.LatLng(40.774159787101574, -73.87578684506354);
       USGSOverlay.prototype = new google.maps.OverlayView();
+	  
+	  
 
       // Initialize the map and the custom overlay.
 
@@ -37,130 +43,193 @@
 	  
         var map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
-        var swBound = new google.maps.LatLng(40.773452922547456, -73.87528258976874);
-      var neBound = new google.maps.LatLng(40.77671897642366, -73.87356079697724);
-      var bounds = new google.maps.LatLngBounds(swBound, neBound);
+        var swBound = new google.maps.LatLng(loc_center.lat() - k_diff, loc_center.lng() - D_diff);
+		var neBound = new google.maps.LatLng(loc_center.lat() + k_diff, loc_center.lng() + D_diff);
+		var bounds = new google.maps.LatLngBounds(swBound, neBound);
 	  
 	   console.log(map);
       
 
         // The photograph is courtesy of the U.S. Geological Survey.
-       var srcImage = 'https://i.imgur.com/2sbZT6Q.jpg';
+       var srcImage = 'https://i.imgur.com/eklZk9W.png';
 
         // The custom USGSOverlay object contains the USGS image,
         // the bounds of the image, and a reference to the map.
         overlay = new USGSOverlay(bounds, srcImage, map);
 		
-		var markerA = new google.maps.Marker({
-    			position: swBound,
-    			map: map,
-    			draggable:true
-    		});
+		//Center marker
+		      	var center_marker = new google.maps.Marker({
+	    			position: loc_center,
+	    			map: map,
+	    			draggable: true,
+	    		});
+				
+				google.maps.event.addListener(center_marker,'drag',function() {
+					var newPointA = new google.maps.LatLng(center_marker.getPosition().lat() - k_diff, center_marker.getPosition().lng() - D_diff);
+		      		var newPointB = new google.maps.LatLng(center_marker.getPosition().lat() + k_diff, center_marker.getPosition().lng() + D_diff);
+		      		var newBounds = new google.maps.LatLngBounds(newPointA, newPointB);
 
-    	var markerB = new google.maps.Marker({
-    		position: neBound,
-    		map: map,
-    		draggable:true
-    	});
+		      		var newPointR = new google.maps.LatLng(center_marker.getPosition().lat() + (Math.cos(rot * Math.PI / 180) * 0.005), center_marker.getPosition().lng() + (Math.sin(rot * Math.PI / 180) * 0.005));		      		
+		      		size_marker.setPosition(newPointB);					
+		      		rotation_marker.setPosition(newPointR);
+
+		           	overlay.updateBounds(newBounds);
+		        });
+				
+				
+				google.maps.event.addListener(center_marker, 'dragend', function () {
+		        	var newPointA = new google.maps.LatLng(center_marker.getPosition().lat() - k_diff, center_marker.getPosition().lng() - D_diff);
+		      		var newPointB = new google.maps.LatLng(center_marker.getPosition().lat() + k_diff, center_marker.getPosition().lng() + D_diff);
+
+		            console.log("point1"+ newPointA);
+		            console.log("point2"+ newPointB);
+		        });
+				
+				
+				 //Size marker
+		        var ext_svg = {
+				    path: 'M -35 -35 h 70 v 70 h -70 Z',
+				    fillOpacity: 0.5,
+				    fillOpacity: 0,
+				    strokeWeight: 2,
+				    scale: 0.2
+				};
+				
+				var size_marker = new google.maps.Marker({
+		    		position: new google.maps.LatLng(loc_center.lat() + k_diff, loc_center.lng() + D_diff),
+		    		map: map,
+		    		draggable: true,
+		    		icon: ext_svg
+		    	});
+				
+				
+				google.maps.event.addListener(size_marker,'drag',function(){
+		          	k_diff = (size_marker.getPosition().lat() - center_marker.getPosition().lat());
+		    		D_diff = (size_marker.getPosition().lng() - center_marker.getPosition().lng());
+
+					var newPointA = new google.maps.LatLng(center_marker.getPosition().lat() - k_diff, center_marker.getPosition().lng() - D_diff);
+		      		var newPointB = new google.maps.LatLng(center_marker.getPosition().lat() + k_diff, center_marker.getPosition().lng() + D_diff);
+		      		var newBounds = new google.maps.LatLngBounds(newPointA, newPointB);
+
+		           	overlay.updateBounds(newBounds);
+		      	});
+				
+				
+				google.maps.event.addListener(size_marker, 'dragend', function () {
+		        	var newPointA = new google.maps.LatLng(center_marker.getPosition().lat() - k_diff, center_marker.getPosition().lng() - D_diff);
+		      		var newPointB = new google.maps.LatLng(center_marker.getPosition().lat() + k_diff, center_marker.getPosition().lng() + D_diff);
+
+		            console.log("point1"+ newPointA);
+		            console.log("point2"+ newPointB);
+		        });
+				
+				
+				
+				
+				
+				
+				//Rotation marker
+		        var circle_svg = {
+				    path: 'M 0, 0 m -75, 0 a 75,75 0 1,0 150,0 a 75,75 0 1,0 -150,0',
+				    fillOpacity: 0.5,
+				    fillOpacity: 0,
+				    strokeWeight: 2,
+				    scale: 0.1
+				};
+		        var rotation_marker = new google.maps.Marker({
+		    		position: new google.maps.LatLng(loc_center.lat() + k_diff, loc_center.lng()),
+		    		map: map,
+		    		draggable: true,
+		    		icon: circle_svg
+		    	});
+				
+				
+				google.maps.event.addListener(rotation_marker,'drag',function() {
+		      		k_rotation_diff = rotation_marker.getPosition().lat() - center_marker.getPosition().lat();
+		      		D_rotation_diff = rotation_marker.getPosition().lng() - center_marker.getPosition().lng();
+					rot = Math.atan2(D_rotation_diff, k_rotation_diff) * 180 / Math.PI;
+					overlay.updateRotation();
+		      	});
+				
+				
+				
 		
-			google.maps.event.addListener(markerA,'drag',function(){
+		
+		
+		
+		
+		
+		
+		
+		
 
-            var newPointA = markerA.getPosition();
-            var newPointB = markerB.getPosition();
-            var newBounds =  new google.maps.LatLngBounds(newPointA, newPointB);
-           	overlay.updateBounds(newBounds);
-        });
+    
 
-      google.maps.event.addListener(markerB,'drag',function(){
 
-          var newPointA = markerA.getPosition();
-          var newPointB = markerB.getPosition();
-          var newBounds =  new google.maps.LatLngBounds(newPointA, newPointB);
-          overlay.updateBounds(newBounds);
-      });
-
-        google.maps.event.addListener(markerA, 'dragend', function () {
-     
-        	var newPointA = markerA.getPosition();
-            var newPointB = markerB.getPosition();
-            console.log("point1"+ newPointA);
-            console.log("point2"+ newPointB);
-        });
-
-        google.maps.event.addListener(markerB, 'dragend', function () {
-        	var newPointA = markerA.getPosition();
-            var newPointB = markerB.getPosition();
-            console.log("point1"+ newPointA);
-            console.log("point2"+ newPointB);
-        });
+        
 
       }
 
       /** @constructor */
       function USGSOverlay(bounds, image, map) {
-
-        // Initialize all properties.
-        this.bounds_ = bounds;
-        this.image_ = image;
-        this.map_ = map;
-
-        // Define a property to hold the image's div. We'll
-        // actually create this div upon receipt of the onAdd()
-        // method so we'll leave it null for now.
-        this.div_ = null;
-
-        // Explicitly call setMap on this overlay.
-        this.setMap(map);
+this.bounds_ = bounds;
+		      	this.image_ = image;
+		      	this.map_ = map;
+		      	this.div_ = null;
+		      	this.setMap(map);
       }
 
       /**
        * onAdd is called when the map's panes are ready and the overlay has been
        * added to the map.
        */
-      USGSOverlay.prototype.onAdd = function() {var div = document.createElement('div');
-      div.style.borderStyle = 'none';
-      div.style.borderWidth = '0px';
-      div.style.position = 'absolute';
-      var img = document.createElement('img');
-      img.src = this.image_;
-      img.style.width = '100%';
-      img.style.height = '100%';
-      img.style.opacity = '0.5';
-      img.style.position = 'absolute';
-      div.appendChild(img);
-      this.div_ = div;
-      var panes = this.getPanes();
-      panes.overlayLayer.appendChild(div);
+      USGSOverlay.prototype.onAdd = function() {
+	  
+		      	var div = document.createElement('div');
+		      	div.style.borderStyle = 'none';
+		      	div.style.borderWidth = '0px';
+		      	div.style.position = 'absolute';
+		      	var img = document.createElement('img');
+		      	img.src = this.image_;
+		      	img.style.width = '100%';
+		      	img.style.height = '100%';
+		      	img.style.opacity = '0.5';
+		      	img.style.position = 'absolute';
+		      	img.style.transform = 'rotate(0deg)';
+		      	div.appendChild(img);
+		      	this.div_ = div;
+		      	var panes = this.getPanes();
+		      	panes.overlayLayer.appendChild(div);
       };
 
       USGSOverlay.prototype.draw = function() {
-
-      var overlayProjection = this.getProjection();
-      var sw = overlayProjection.fromLatLngToDivPixel(this.bounds_.getSouthWest());
-      var ne = overlayProjection.fromLatLngToDivPixel(this.bounds_.getNorthEast());
-      var div = this.div_;
-      div.style.left = sw.x + 'px';
-      div.style.top = ne.y + 'px';
-      div.style.width = (ne.x - sw.x) + 'px';
-      div.style.height = (sw.y - ne.y) + 'px';
+	  
+				var overlayProjection = this.getProjection();
+		    	var sw = overlayProjection.fromLatLngToDivPixel(this.bounds_.getSouthWest());
+		    	var ne = overlayProjection.fromLatLngToDivPixel(this.bounds_.getNorthEast());
+		    	var div = this.div_;
+		    	div.style.left = sw.x + 'px';
+		    	div.style.top = ne.y + 'px';
+		    	div.style.width = (ne.x - sw.x) + 'px';
+		    	div.style.height = (sw.y - ne.y) + 'px';
+		    	div.style.transform = 'rotate(' + rot + 'deg)';
       };
 
       // The onRemove() method will be called automatically from the API if
       // we ever set the overlay's map property to 'null'.
-      USGSOverlay.prototype.onRemove = function() {
-        this.div_.parentNode.removeChild(this.div_);
-        this.div_ = null;
-      };
-	  
-	  USGSOverlay.prototype.updateBounds = function(bounds){
-    	this.bounds_ = bounds;
-    	this.draw();
-    };
+     USGSOverlay.prototype.updateBounds = function(bounds){
+		    	this.bounds_ = bounds;
+		    	this.draw();
+		    };
 
-    USGSOverlay.prototype.onRemove = function() {
-      this.div_.parentNode.removeChild(this.div_);
-      this.div_ = null;
-    };
+		    USGSOverlay.prototype.updateRotation = function(){
+		    	this.draw();
+		    };
+
+		    USGSOverlay.prototype.onRemove = function() {
+		    	this.div_.parentNode.removeChild(this.div_);
+		    	this.div_ = null;
+		    };
 
       google.maps.event.addDomListener(window, 'load', initMap);
     </script>

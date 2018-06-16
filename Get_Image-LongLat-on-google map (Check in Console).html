@@ -27,7 +27,7 @@
 	  var k_diff = 0.005;
 		var D_diff = 0.01;
 		var rot = 0;
-		var loc_center = new google.maps.LatLng(40.774159787101574, -73.87578684506354);
+		var loc_center = new google.maps.LatLng(40.77776247806891, -73.8685334270948);
       USGSOverlay.prototype = new google.maps.OverlayView();
 	  
 	  
@@ -38,8 +38,7 @@
 	  
 	  var mapOptions = {
         zoom: 17,
-		gestureHandling: 'greedy',
-        center: new google.maps.LatLng(40.774159787101574,-73.87578684506354)
+        center: new google.maps.LatLng(40.77776247806891, -73.8685334270948)
       };
 	  
         var map = new google.maps.Map(document.getElementById('map'), mapOptions);
@@ -52,7 +51,7 @@
       
 
         // The photograph is courtesy of the U.S. Geological Survey.
-       var srcImage = 'https://i.imgur.com/eklZk9W.png';
+       var srcImage = 'https://i.imgur.com/1lsMetV.jpg';
 
         // The custom USGSOverlay object contains the USGS image,
         // the bounds of the image, and a reference to the map.
@@ -82,8 +81,9 @@
 		        	var newPointA = new google.maps.LatLng(center_marker.getPosition().lat() - k_diff, center_marker.getPosition().lng() - D_diff);
 		      		var newPointB = new google.maps.LatLng(center_marker.getPosition().lat() + k_diff, center_marker.getPosition().lng() + D_diff);
 
-		            console.log("point1"+ newPointA);
-		            console.log("point2"+ newPointB);
+		            console.log("pointEN"+ newPointB);
+		            console.log("pointSW"+ newPointA);
+		            
 		        });
 				
 				
@@ -120,11 +120,14 @@
 		        	var newPointA = new google.maps.LatLng(center_marker.getPosition().lat() - k_diff, center_marker.getPosition().lng() - D_diff);
 		      		var newPointB = new google.maps.LatLng(center_marker.getPosition().lat() + k_diff, center_marker.getPosition().lng() + D_diff);
 
-		            console.log("point1"+ newPointA);
-		            console.log("point2"+ newPointB);
+		            console.log("pointEN"+ newPointB);
+		            console.log("pointSW"+ newPointA);
+		            
 		        });
 				
-
+				
+				
+				
 				
 				
 				//Rotation marker
@@ -149,8 +152,30 @@
 					rot = Math.atan2(D_rotation_diff, k_rotation_diff) * 180 / Math.PI;
 					overlay.updateRotation();
 		      	});
-			
+				
+				google.maps.event.addListener(rotation_marker, 'dragend', function () {
+		        	k_rotation_diff = rotation_marker.getPosition().lat() - center_marker.getPosition().lat();
+		      		D_rotation_diff = rotation_marker.getPosition().lng() - center_marker.getPosition().lng();
+					rot = Math.atan2(D_rotation_diff, k_rotation_diff) * 180 / Math.PI;
 
+		            console.log("Rotation:"+ rot);
+		            
+		        });
+				
+		
+		
+		
+		
+		
+		
+		
+		
+		
+
+    
+
+
+        
 
       }
 

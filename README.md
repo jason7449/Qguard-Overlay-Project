@@ -11,6 +11,7 @@ Qguard及時地圖+圖層覆蓋+取得圖片經緯度工具
     $ wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
 
 2.設定環境參數:
+    
     $ export NVM_DIR="$HOME/.nvm"
     
     $ [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
@@ -30,7 +31,6 @@ Qguard及時地圖+圖層覆蓋+取得圖片經緯度工具
 
 4. 進入到 qguard_web_client 資料夾後下此指令
     $ npm install
-
 
 
 5. 進入 config 資料夾

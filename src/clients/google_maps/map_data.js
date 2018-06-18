@@ -10,7 +10,7 @@ class MapData {
     this.map = new google.maps.Map(document.getElementById("map-canvas"), {
       zoom: 19.5,
       center: this.center,
-      draggable: false,
+      draggable: true,
       scaleControl: false,
       /*
       scaleControlOptions: {
@@ -23,7 +23,7 @@ class MapData {
         position: google.maps.ControlPosition.LEFT_BOTTOM
       },
       */
-      zoomControl: false,
+      zoomControl: true,
       /*
       zoomControlOptions: {
         position: google.maps.ControlPosition.LEFT_CENTER
@@ -40,16 +40,21 @@ class MapData {
 
 
      var imageBounds = {
-         north: 40.776584921487284,
-          south: 40.77351385925161,
-          east: -73.87345887372021,
-          west: -73.87523967442439
+         north: 40.777384114520906,
+          south: 40.77285987919067,
+          east: -73.86889748272836,
+          west: -73.87576538739143
       };
+
+      var overlayOpts={
+        //Transparency
+        opacity: 1
+      }
 
 
       historicalOverlay = new google.maps.GroundOverlay(
-        'https://i.imgur.com/2sbZT6Q.jpg',
-        imageBounds);
+        'https://i.imgur.com/1lsMetV.jpg',
+        imageBounds, overlayOpts  );
       historicalOverlay.setMap(this.map);
 
 

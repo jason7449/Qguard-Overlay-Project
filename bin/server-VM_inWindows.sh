@@ -1,4 +1,4 @@
 #!/bin/bash
 
 cd ../src/server
-node main.js
+node main.js --log

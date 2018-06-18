@@ -12,6 +12,7 @@ Qguard及時地圖+圖層覆蓋+取得圖片經緯度工具
 
 2.設定環境參數:
     $ export NVM_DIR="$HOME/.nvm"
+    
     $ [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
     $command -v nvm
@@ -27,17 +28,19 @@ Qguard及時地圖+圖層覆蓋+取得圖片經緯度工具
     Or you can just run it:
     $ nvm run node --version
 
-3. 進入到 qguard_web_client 資料夾後下此指令
+4. 進入到 qguard_web_client 資料夾後下此指令
     $ npm install
 
 
 
-4. 進入 config 資料夾
+5. 進入 config 資料夾
   - Edit config.ini with the correct latitude & longitude of the primary sensor. 
   - Set the angle offset from north to the angle between the "front" of the lidar and geographic north in degrees  in the sidebar
 
-5. 到 /bin 資料夾啟動程式
+6. 到 /bin 資料夾啟動程式
     $ ./server.sh
+  (if OS is virtual box in Windows)
+    $ sed -i -e 's/\r$//' scriptname.sh
 
 7.打開瀏覽器輸入
    localhost:3000 or <server_ip>:3000

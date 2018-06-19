@@ -38,7 +38,8 @@
 	  
 	  var mapOptions = {
         zoom: 17,
-        center: new google.maps.LatLng(40.77776247806891, -73.8685334270948)
+        center: new google.maps.LatLng(40.77776247806891, -73.8685334270948),
+		gestureHandling: 'greedy'
       };
 	  
         var map = new google.maps.Map(document.getElementById('map'), mapOptions);
